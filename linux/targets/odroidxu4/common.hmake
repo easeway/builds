@@ -3,7 +3,7 @@ format: hypermake.v0
 
 targets:
   fetch-odroidxu4-4.6:
-    description: fetch ODroid XU4 kernel
+    description: fetch ODroid XU4 kernel v4.6
     after:
       - builder-armv7
     cmds:
@@ -12,13 +12,22 @@ targets:
       - git clone --depth=1 https://github.com/tobetter/linux -b odroidxu4-v4.6 $HMAKE_PROJECT_DIR/build/src/linux-odroidxu4-v4.6
 
   fetch-odroidxu4-4.2:
-    description: fetch ODroid XU4 kernel
+    description: fetch ODroid XU4 kernel v4.2
     after:
       - builder-armv7
     cmds:
       - mkdir -p $HMAKE_PROJECT_DIR/build/src
       - rm -fr $HMAKE_PROJECT_DIR/build/src/linux-odroidxu4-4.2
       - git clone --depth=1 https://github.com/tobetter/linux -b odroidxu4-v4.2 $HMAKE_PROJECT_DIR/build/src/linux-odroidxu4-v4.2
+
+  fetch-odroidxu4-3.10:
+    description: fetch ODroid XU4 kernel v3.10
+    after:
+      - builder-armv7
+    cmds:
+      - mkdir -p $HMAKE_PROJECT_DIR/build/src
+      - rm -fr $HMAKE_PROJECT_DIR/build/src/linux-odroidxu4-v3.10
+      - git clone --depth=1 https://github.com/hardkernel/linux.git -b odroidxu3-3.10.y $HMAKE_PROJECT_DIR/build/src/linux-odroidxu4-v3.10
 
 local:
   docker:

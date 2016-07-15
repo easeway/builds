@@ -26,7 +26,7 @@ oldconfig() {
 build_make() {
     local arch=$1 cross=$2
     shift; shift
-    LOCALVERSION= make -C $OUTDIR ARCH=$arch CROSS_COMPILE=$cross V=1 $MAKE_BUILD_OPTS $@
+    LOCALVERSION= make -C $OUTDIR ARCH=$arch CROSS_COMPILE=$cross V=1 $MAKE_OPTS $@
 }
 
 build() {
