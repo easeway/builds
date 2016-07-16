@@ -10,7 +10,7 @@ export PATH=/go/bin:/usr/local/go/bin:$PATH
 rm -fr $SRCDIR
 mkdir -p $(dirname $SRCDIR)
 
-git clone --depth=1 https://github.com/hashicorp/nomad $SRCDIR
+git clone --depth=1 https://github.com/hashicorp/nomad -b v0.4.0 $SRCDIR
 
 cd $SRCDIR
 
