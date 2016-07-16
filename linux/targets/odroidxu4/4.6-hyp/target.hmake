@@ -17,10 +17,22 @@ targets:
     cmds:
       - $HMAKE_PROJECT_DIR/build.sh oldconfig arm
 
+  patch-odroidxu4-4.6-hyp:
+    description: apply patches
+    after:
+      - fetch-odroidxu4-4.6
+    watches:
+      - '*.diff'
+    env:
+      - KERNEL_VERSION=odroidxu4-v4.6
+    cmds:
+      - '$HMAKE_PROJECT_DIR/patch.sh -p1 *.diff'
+
   kernel-odroidxu4-4.6-hyp:
     description: build kernel for ODroid XU4 platform
     after:
       - config-odroidxu4-4.6-hyp
+      - patch-odroidxu4-4.6-hyp
     env:
       - KERNEL_VERSION=odroidxu4-v4.6
       - MAKE_OPTS
@@ -51,6 +63,27 @@ targets:
     after:
       - kernel-odroidxu4-4.6-hyp
       - install-odroidxu4-4.6-hyp
+
+  nconfig-odroidxu4-4.6-hyp:
+    description: configure kernel for ODroid XU4 platform
+    after:
+      - fetch-odroidxu4-4.6
+    always: true
+    console: true
+    env:
+      - KERNEL_VERSION=odroidxu4-v4.6
+    cmds:
+      - $HMAKE_PROJECT_DIR/build.sh make arm arm-linux-gnueabihf- nconfig
+
+  oldconfig-odroidxu4-4.6-hyp:
+    description: apply kernel config for ODroid XU4 platform
+    after:
+      - fetch-odroidxu4-4.6
+    always: true
+    env:
+      - KERNEL_VERSION=odroidxu4-v4.6
+    cmds:
+      - $HMAKE_PROJECT_DIR/build.sh make arm arm-linux-gnueabihf- oldconfig
 
   clean-odroidxu4-4.6-hyp:
     description: remove build files for arm-odroidxu4

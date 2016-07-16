@@ -1,0 +1,36 @@
+diff --git a/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi b/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi
+index 14b85e0..8d1ec2e 100644
+--- a/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi
++++ b/arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi
+@@ -19,6 +19,15 @@
+ #include "exynos5422-cpu-thermal.dtsi"
+ 
+ / {
++    timer {
++       compatible = "arm,armv7-timer";
++       interrupts = <1 13 0xf08>,
++               <1 14 0xf08>,
++               <1 11 0xf08>,
++               <1 10 0xf08>;
++       clock-frequency = <20000000>;
++    };
++
+ 	memory {
+ 		reg = <0x40000000 0x7EA00000>;
+ 	};
+diff --git a/arch/arm/kernel/sleep.S b/arch/arm/kernel/sleep.S
+index 0f6c100..40cad54 100644
+--- a/arch/arm/kernel/sleep.S
++++ b/arch/arm/kernel/sleep.S
+@@ -131,7 +131,10 @@ ENTRY(cpu_resume_arm)
+ ENTRY(cpu_resume)
+ ARM_BE8(setend be)			@ ensure we are in BE mode
+ #ifdef CONFIG_ARM_VIRT_EXT
+-	bl	__hyp_stub_install_secondary
++	mrc	p15, 0, r1, c0, c0, 5
++	and	r1, r1, #0x3
++	cmp	r1, #0
++	blne __hyp_stub_install_secondary
+ #endif
+ 	safe_svcmode_maskall r1
+ 	mov	r1, #0
