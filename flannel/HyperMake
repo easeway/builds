@@ -1,0 +1,58 @@
+---
+format: hypermake.v0
+
+name: flannel
+
+targets:
+    builder-linux-arm:
+        description: Builder image for Linux ARMv7
+        watches:
+            - linux-armv7.Dockerfile
+            - setup.sh
+        build: linux-armv7.Dockerfile
+        image: builds-flannel:linux-armv7
+
+    builder-linux-amd64:
+        description: Builder image for Linux AMD64
+        watches:
+            - linux-amd64.Dockerfile
+            - setup.sh
+        build: linux-amd64.Dockerfile
+        image: builds-flannel:linux-amd64
+
+    fetch:
+        description: Fetch flannel source code
+        after:
+            - builder-linux-amd64
+        image: builds-flannel:linux-amd64
+        watches:
+            - fetch.sh
+        cmds:
+            - ./fetch.sh
+
+    linux-arm:
+        description: flannel for Linux ARMv7
+        after:
+            - builder-linux-arm
+            - fetch
+        watches:
+            - build.sh
+        image: builds-flannel:linux-armv7
+        cmds:
+            - ./build.sh linux arm
+
+    linux-amd64:
+        description: flannel for Linux AMD64
+        after:
+            - builder-linux-amd64
+            - fetch
+        watches:
+            - build.sh
+        image: builds-flannel:linux-amd64
+        cmds:
+            - ./build.sh linux amd64
+
+settings:
+    default-targets:
+        - linux-arm
+        - linux-amd64
